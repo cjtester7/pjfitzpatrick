@@ -1,6 +1,7 @@
 # FILE:    netlify.toml
-# VERSION: v3
-# UPDATED: 2026-05-05 00:15
+# VERSION: v4
+# UPDATED: 2026-05-05 00:30
+# CHANGES: v4 (CR005): Points to index-v4.html.
 # CHANGES: v3 (CR004): Points to index-v3.html.
 # CHANGES: v2 (CR002): Points to index-v2.html.
 # CHANGES: v1: Initial release. Points to index-v1.html. Defines functions path for Claude proxy.
@@ -18,5 +19,5 @@
 # Route root to current version
 [[redirects]]
   from   = "/"
-  to     = "/index-v3.html"
+  to     = "/index-v4.html"
   status = 200
