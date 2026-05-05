@@ -1,6 +1,7 @@
 # FILE:    netlify.toml
-# VERSION: v4
-# UPDATED: 2026-05-05 00:30
+# VERSION: v5
+# UPDATED: 2026-05-05 00:45
+# CHANGES: v5 (CR003): Points to index-v5.html.
 # CHANGES: v4 (CR005): Points to index-v4.html.
 # CHANGES: v3 (CR004): Points to index-v3.html.
 # CHANGES: v2 (CR002): Points to index-v2.html.
@@ -10,14 +11,12 @@
   publish = "."
   functions = "netlify/functions"
 
-# Allow Netlify Functions passthrough
 [[redirects]]
   from   = "/.netlify/functions/*"
   to     = "/.netlify/functions/:splat"
   status = 200
 
-# Route root to current version
 [[redirects]]
   from   = "/"
-  to     = "/index-v4.html"
+  to     = "/index-v5.html"
   status = 200
