@@ -1,6 +1,7 @@
 # FILE:    netlify.toml
-# VERSION: v9
-# UPDATED: 2026-05-05 01:45
+# VERSION: v10
+# UPDATED: 2026-05-05 02:00
+# CHANGES: v10 (CR009): Points to index-v10.html.
 # CHANGES: v9 (CR008 cont): Points to index-v9.html.
 # CHANGES: v8 (CR008): Points to index-v8.html.
 # CHANGES: v7 (CR007): Points to index-v7.html.
@@ -22,5 +23,5 @@
 
 [[redirects]]
   from   = "/"
-  to     = "/index-v9.html"
+  to     = "/index-v10.html"
   status = 200
