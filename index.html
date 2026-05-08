@@ -616,16 +616,16 @@ CHANGES:
 </style>
 
 <!--
-FILE: index-v20-ios-override-fix.html
-VERSION: v20
-UPDATED: 2026-05-08 04:22
+FILE: index-v21-ios-actions-fix.html
+VERSION: v21
+UPDATED: 2026-05-08 04:27
 CHANGES:
-- Added hard override mobile CSS block
-- Force full-width panel on iPhone
-- Hide duplicate launcher bubble when open
-- Remove left-side offset issue
-- Simplify mobile header layout
+- Restored Start / End / Export buttons on mobile
+- Fixed hidden action buttons issue
+- Improved mobile header layout
+- Kept iPhone safe-area fixes
 -->
+
 
 <style id="v20-ios-overrides">
 
@@ -677,9 +677,18 @@ CHANGES:
     overflow: hidden !important;
   }
 
+  
   .ph-actions {
-    display: none !important;
+    display: flex !important;
+    gap: 4px !important;
+    margin-left: 8px !important;
   }
+
+  .ph-btn {
+    padding: 4px 6px !important;
+    font-size: 0.62rem !important;
+  }
+
 
   .ph-info {
     min-width: 0 !important;
@@ -713,6 +722,32 @@ CHANGES:
 
   .panel-footer {
     display: none !important;
+  }
+
+}
+
+</style>
+
+
+<style id="v21-mobile-actions">
+
+@media only screen and (max-width: 480px) {
+
+  .panel-header {
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+
+  .ph-info {
+    flex: 1 1 auto !important;
+  }
+
+  .ph-name {
+    font-size: 0.88rem !important;
+  }
+
+  .ph-status {
+    font-size: 0.68rem !important;
   }
 
 }
