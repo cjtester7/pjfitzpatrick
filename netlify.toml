@@ -1,7 +1,7 @@
 # FILE:    netlify.toml
-# VERSION: v18
-# UPDATED: 2026-05-07 09:00
-# CHANGES: v18 (CR012 cont): Points to index-v18.html.
+# VERSION: v19
+# UPDATED: 2026-05-07 09:30
+# CHANGES: v19 (CR012 cont): Points to index-v19.html.
 
 [build]
   publish = "."
@@ -14,5 +14,5 @@
 
 [[redirects]]
   from   = "/"
-  to     = "/index-v18.html"
+  to     = "/index-v19.html"
   status = 200
