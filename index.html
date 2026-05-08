@@ -524,79 +524,83 @@
     .panel-footer a { color: var(--gray-500); }
 
     /* ── Mobile: near full-screen panel ───────────────────── */
-    @media (max-width: 480px) {
+    
+@media (max-width: 480px) {
 
-      :root {
-        --boffset: 12px;
-      }
+  :root {
+    --boffset: 16px;
+  }
 
-      html,
-      body {
-        height: 100%;
-        overflow: hidden;
-      }
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
 
-      .chat-panel {
-        position: fixed;
+  .chat-panel {
+    position: fixed;
 
-        top: env(safe-area-inset-top);
-        left: 0;
-        right: 0;
-        bottom: 0;
+    top: env(safe-area-inset-top);
+    left: 0;
+    right: 0;
+    bottom: 0;
 
-        width: 100%;
-        height: 100%;
+    width: 100%;
+    height: 100%;
 
-        border-radius: 0;
+    border-radius: 0;
 
-        display: flex;
-        flex-direction: column;
+    display: flex;
+    flex-direction: column;
 
-        transform: none !important;
-      }
+    z-index: 9998;
+  }
 
-      .panel-header {
-        padding-top: max(14px, env(safe-area-inset-top));
-        flex-shrink: 0;
-      }
+  /* Closed state */
+  .chat-panel:not(.open) {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(24px);
+  }
 
-      .panel-messages {
-        flex: 1;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-      }
+  /* Open state */
+  .chat-panel.open {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+  }
 
-      .panel-input {
-        display: flex !important;
-        position: relative;
-        flex-shrink: 0;
+  .panel-header {
+    padding-top: max(14px, env(safe-area-inset-top));
+    flex-shrink: 0;
+  }
 
-        padding-bottom: max(10px, env(safe-area-inset-bottom));
+  .panel-messages {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 
-        background: white;
-      }
+  .panel-input {
+    display: flex !important;
+    position: relative;
+    flex-shrink: 0;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+    background: white;
+  }
 
-      .float-input {
-        display: none !important;
-      }
+  .float-input {
+    display: none !important;
+  }
 
-      .chat-bubble {
-        display: none;
-      }
-    }
-      .chat-panel {
-        /* On phones: anchor to bottom, stretch wide, tall panel */
-        bottom: calc(var(--boffset) + var(--bsize) + 10px);
-        right: var(--boffset);
-        left: var(--boffset);
-        width: auto;
-        height: 75dvh;
-        height: 75vh; /* fallback */
-        border-radius: 18px;
-      }
+  .chat-bubble {
+    display: flex !important;
+    z-index: 9999;
+  }
+}
 
-    }
-  </style>
+
+</style>
 </head>
 <body>
 
