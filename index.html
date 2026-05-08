@@ -201,10 +201,6 @@
       gap: 6px;
     }
     .ph-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-
       background: rgba(255,255,255,0.15);
       border: none;
       color: var(--white);
@@ -529,65 +525,78 @@
 
     /* ── Mobile: near full-screen panel ───────────────────── */
     @media (max-width: 480px) {
+
       :root {
-        --pw: 95vw;
-        --boffset: 16px;
+        --boffset: 12px;
       }
+
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .chat-panel {
+        position: fixed;
+
+        top: env(safe-area-inset-top);
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        width: 100%;
+        height: 100%;
+
+        border-radius: 0;
+
+        display: flex;
+        flex-direction: column;
+
+        transform: none !important;
+      }
+
+      .panel-header {
+        padding-top: max(14px, env(safe-area-inset-top));
+        flex-shrink: 0;
+      }
+
+      .panel-messages {
+        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .panel-input {
+        display: flex !important;
+        position: relative;
+        flex-shrink: 0;
+
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+
+        background: white;
+      }
+
+      .float-input {
+        display: none !important;
+      }
+
+      .chat-bubble {
+        display: none;
+      }
+    }
       .chat-panel {
         /* On phones: anchor to bottom, stretch wide, tall panel */
-        top: max(12px, env(safe-area-inset-top));
-    bottom: calc(env(safe-area-inset-bottom) + 12px);
-    right: 12px;
-    left: 12px;
-
-    width: auto;
-    height: auto;
-
-    border-radius: 18px;
+        bottom: calc(var(--boffset) + var(--bsize) + 10px);
+        right: var(--boffset);
+        left: var(--boffset);
+        width: auto;
+        height: 75dvh;
+        height: 75vh; /* fallback */
+        border-radius: 18px;
       }
 
     }
-  
-/* ── SVG Icons ─────────────────────────────────────────── */
-.icon-svg {
-  width: 20px;
-  height: 20px;
-  display: block;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  pointer-events: none;
-}
-
-.icon-svg-fill {
-  width: 20px;
-  height: 20px;
-  display: block;
-  fill: currentColor;
-  pointer-events: none;
-}
-
-.chat-bubble .icon-svg,
-.chat-bubble .icon-svg-fill {
-  width: 24px;
-  height: 24px;
-}
-
-.msg-avatar .icon-svg,
-.msg-avatar .icon-svg-fill {
-  width: 16px;
-  height: 16px;
-}
-
-.ph-logo .icon-svg,
-.ph-logo .icon-svg-fill {
-  width: 18px;
-  height: 18px;
-}
-
-</style>
+  </style>
 </head>
 <body>
 
@@ -601,7 +610,7 @@
 
 <!-- ── Floating chat bubble ────────────────────────────────────────────────── -->
 <button class="chat-bubble" id="chatBubble" onclick="togglePanel()" aria-label="Open PJ chat">
-  <span id="bubbleIcon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 11.5L12 4l9 7.5"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg></span>
+  <span id="bubbleIcon">🏠</span>
   <div class="bubble-dot" id="bubbleDot"></div>
 </button>
 
@@ -610,23 +619,23 @@
 
   <!-- Panel header -->
   <div class="panel-header">
-    <div class="ph-logo"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 11.5L12 4l9 7.5"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg></div>
+    <div class="ph-logo">🏠</div>
     <div class="ph-info">
       <div class="ph-name">PJ — AI Roofing Advisor</div>
       <div class="ph-status"><div class="ph-dot"></div> Online 24/7</div>
     </div>
     <div class="ph-actions">
-      <button class="ph-btn" id="btnStart" onclick="startConversation()"><svg class="icon-svg-fill" viewBox="0 0 24 24"><path d="M8 5V19L19 12Z"></path></svg><span>Start</span></button>
-      <button class="ph-btn danger" id="btnEnd" onclick="endConversation()" disabled><svg class="icon-svg-fill" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"></rect></svg><span>End</span></button>
-      <button class="ph-btn" id="btnExport" onclick="exportTranscript()" disabled><svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 3V15"></path><path d="M7 10L12 15L17 10"></path><path d="M5 21H19"></path></svg><span>Export</span></button>
+      <button class="ph-btn" id="btnStart" onclick="startConversation()">▶ Start</button>
+      <button class="ph-btn danger" id="btnEnd" onclick="endConversation()" disabled>◼ End</button>
+      <button class="ph-btn" id="btnExport" onclick="exportTranscript()" disabled>⬇ Export</button>
     </div>
-    <button class="ph-close" onclick="togglePanel()" aria-label="Close"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M18 6L6 18"></path><path d="M6 6l12 12"></path></svg></button>
+    <button class="ph-close" onclick="togglePanel()" aria-label="Close">✕</button>
   </div>
 
   <!-- Messages -->
   <div class="panel-messages" id="chatMessages">
     <div class="idle-state" id="idleState">
-      <div class="idle-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 11.5L12 4l9 7.5"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg></div>
+      <div class="idle-icon">🏠</div>
       <div class="idle-title">Welcome to PJ Fitzpatrick</div>
       <div class="idle-sub">Press <strong>▶ Start</strong> to chat with PJ, your AI roofing advisor.</div>
     </div>
@@ -655,7 +664,7 @@
       onfocus="onInputFocus()"
       onblur="onInputBlur()"
     ></textarea>
-    <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled title="Send"><svg class="icon-svg-fill" viewBox="0 0 24 24"><path d="M3 21L23 12L3 3V10L17 12L3 14V21Z"></path></svg></button>
+    <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled title="Send">➤</button>
   </div>
 
   <!-- Footer -->
@@ -663,20 +672,6 @@
     PJ is an AI assistant. Emergencies: <a href="tel:18772464354">1-877-246-4354</a> &nbsp;·&nbsp; <a href="https://www.pjfitz.com" target="_blank">pjfitz.com</a>
   </div>
 
-</div>
-
-<!-- ── Floating input (mobile Visual Viewport API — outside panel) ─────────── -->
-<div class="float-input" id="floatInput">
-  <textarea
-    class="input-field"
-    id="floatInputField"
-    placeholder="Ask PJ a question…"
-    rows="1"
-    disabled
-    onkeydown="handleKeyDown(event)"
-    oninput="autoResize(this)"
-  ></textarea>
-  <button class="send-btn" id="floatSendBtn" onclick="sendMessage()" disabled title="Send"><svg class="icon-svg-fill" viewBox="0 0 24 24"><path d="M3 21L23 12L3 3V10L17 12L3 14V21Z"></path></svg></button>
 </div>
 
 <script>
@@ -797,18 +792,15 @@ function showTyping(visible) {
 }
 
 function setInputEnabled(enabled) {
-  var panelField   = document.getElementById("inputField");
-  var panelSend    = document.getElementById("sendBtn");
-  var floatField   = document.getElementById("floatInputField");
-  var floatSend    = document.getElementById("floatSendBtn");
+  var panelField = document.getElementById("inputField");
+  var panelSend  = document.getElementById("sendBtn");
+
   panelField.disabled = !enabled;
   panelSend.disabled  = !enabled;
-  floatField.disabled = !enabled;
-  floatSend.disabled  = !enabled;
+
   if (enabled) {
     setTimeout(function() {
-      var active = isMobilePhone() ? floatField : panelField;
-      active.focus();
+      panelField.focus();
     }, 80);
   }
 }
@@ -818,77 +810,18 @@ function autoResize(el) {
   el.style.height = Math.min(el.scrollHeight, 100) + "px";
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Visual Viewport API — mobile input positioning
-// Tracks exact keyboard height and pins the floating input row above it.
-// meta interactive-widget=overlays-content ensures viewport doesn't shrink.
-// ─────────────────────────────────────────────────────────────────────────────
-var vvListenerAttached = false;
 
-function attachVisualViewport() {
-  if (!isMobilePhone() || !window.visualViewport || vvListenerAttached) { return; }
-  vvListenerAttached = true;
-
-  function onViewportChange() {
-    var vv        = window.visualViewport;
-    var floatEl   = document.getElementById("floatInput");
-    var panelMsgs = document.getElementById("chatMessages");
-
-    // Distance from bottom of visual viewport to bottom of layout viewport
-    var kbHeight = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
-    var inputH   = floatEl.offsetHeight || 64;
-
-    // Pin float input just above the keyboard
-    floatEl.style.bottom = kbHeight + "px";
-
-    // Pad messages so last message isn't hidden behind float input
-    panelMsgs.style.paddingBottom = (inputH + 8) + "px";
-
-    scrollToBottom();
-  }
-
-  window.visualViewport.addEventListener("resize", onViewportChange);
-  window.visualViewport.addEventListener("scroll", onViewportChange);
-}
-
-// Called when panel opens — show/hide float input based on device type
-function syncInputMode() {
-  var isMobile     = isMobilePhone();
-  var panelInput   = document.querySelector(".panel-input");
-  var floatInput   = document.getElementById("floatInput");
-  var inField      = document.getElementById("inputField");
-  var floatField   = document.getElementById("floatInputField");
-  var floatSendBtn = document.getElementById("floatSendBtn");
-
-  if (isMobile) {
-    // Mobile: hide panel input, show float input
-    if (panelInput) { panelInput.style.display = "none"; }
-    floatInput.classList.add("visible");
-    // Sync disabled state
-    floatField.disabled   = inField.disabled;
-    floatSendBtn.disabled = document.getElementById("sendBtn").disabled;
-    attachVisualViewport();
-  } else {
-    // Desktop: ensure panel input visible, float input hidden
-    if (panelInput) { panelInput.style.display = ""; }
-    floatInput.classList.remove("visible");
-  }
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Panel toggle
 // ─────────────────────────────────────────────────────────────────────────────
 function togglePanel() {
   panelOpen = !panelOpen;
+
   document.getElementById("chatPanel").classList.toggle("open", panelOpen);
   document.getElementById("chatBubble").classList.toggle("open", panelOpen);
-  document.getElementById("bubbleIcon").innerHTML = panelOpen ? `<svg class="icon-svg" viewBox="0 0 24 24"><path d="M18 6L6 18"></path><path d="M6 6l12 12"></path></svg>` : `<svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 11.5L12 4l9 7.5"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg>`;
-  if (panelOpen) {
-    syncInputMode();
-  } else {
-    document.getElementById("floatInput").classList.remove("visible");
-    document.getElementById("chatMessages").style.paddingBottom = "";
-  }
+
+  document.getElementById("bubbleIcon").textContent = panelOpen ? "✕" : "🏠";
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -902,7 +835,7 @@ function appendMessage(role, text, ts) {
   var row = document.createElement("div");
   row.className = "msg-row " + (role === "user" ? "user" : "bot");
   row.innerHTML =
-    (role === "user" ? '<div class="msg-avatar"><svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c1.8-4 5-6 8-6s6.2 2 8 6"></path></svg></div>' : '<div class="msg-avatar"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 11.5L12 4l9 7.5"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg></div>') +
+    (role === "user" ? '<div class="msg-avatar">👤</div>' : '<div class="msg-avatar">🏠</div>') +
     '<div class="msg-content-wrap">' +
       '<div class="msg-bubble">' + buildMessageContent(text) + '</div>' +
       '<div class="msg-time">' + timeStr + '</div>' +
@@ -936,7 +869,7 @@ function appendMainMenuButton(container, beforeNode) {
   wrap.className = "main-menu-wrapper";
   var btn = document.createElement("button");
   btn.className = "main-menu-btn";
-  btn.innerHTML = `<svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 6H20"></path><path d="M4 12H20"></path><path d="M4 18H20"></path></svg><span style="margin-left:6px;">Main Menu</span>`;
+  btn.innerHTML = "&#9776; Main Menu";
   btn.onclick = function() {
     if (!conversationActive) { return; }
     var chips = document.createElement("div");
@@ -966,7 +899,7 @@ function appendRestartButton() {
   wrap.className = "restart-wrap";
   var btn = document.createElement("button");
   btn.className = "restart-btn";
-  btn.innerHTML = `<svg class="icon-svg-fill" viewBox="0 0 24 24"><path d="M8 5V19L19 12Z"></path></svg><span style="margin-left:6px;">Start New Conversation</span>`;
+  btn.innerHTML = "&#9654; Start New Conversation";
   btn.onclick = startConversation;
   wrap.appendChild(btn);
   msgs.insertBefore(wrap, typing);
@@ -989,7 +922,7 @@ function startConversation() {
   typing.className = "msg-row typing-row";
   typing.id = "typingRow";
   typing.innerHTML =
-    '<div class="msg-avatar"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 11.5L12 4l9 7.5"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg></div>' +
+    '<div class="msg-avatar">🏠</div>' +
     '<div class="typing-bubble">' +
       '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>' +
     '</div>';
@@ -1008,7 +941,7 @@ function startConversation() {
   var row = document.createElement("div");
   row.className = "msg-row bot";
   row.innerHTML =
-    '<div class="msg-avatar"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 11.5L12 4l9 7.5"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg></div>' +
+    '<div class="msg-avatar">🏠</div>' +
     '<div class="msg-content-wrap">' +
       '<div class="msg-bubble">' + buildMessageContent(welcomeText) + '</div>' +
       '<div class="msg-time">' + timeStr + '</div>' +
@@ -1049,13 +982,14 @@ function handleKeyDown(e) {
 }
 
 function sendMessage() {
-  var field = isMobilePhone()
-    ? document.getElementById("floatInputField")
-    : document.getElementById("inputField");
+  var field = document.getElementById("inputField");
   var text = field.value.trim();
+
   if (!text || !conversationActive) { return; }
+
   field.value = "";
   field.style.height = "auto";
+
   sendMessageText(text);
 }
 
