@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <!--
-FILE: index-v18-ios-rebuild.html
-VERSION: v18
-UPDATED: 2026-05-08 04:09
+FILE: index-v22-ios-input-fix.html
+VERSION: v22
+UPDATED: 2026-05-08 04:32
 CHANGES:
-- Removed VisualViewport API implementation
-- Removed floating input system
-- Removed interactive-widget overlays-content meta tag
-- Rebuilt iPhone mobile layout using native viewport behavior
-- Added version tracking comment block
+- Fixed missing mobile input box visibility
+- Restored proper panel input z-index and background
+- Ensured sticky input remains visible on iPhone
+- Preserved mobile safe-area fixes
 -->
+
 
 <!-- VERSION: v17                                                              -->
 <!-- UPDATED: 2026-05-05 04:10                                                 -->
@@ -748,6 +748,75 @@ CHANGES:
 
   .ph-status {
     font-size: 0.68rem !important;
+  }
+
+}
+
+</style>
+
+
+<style id="v22-input-visibility-fix">
+
+@media only screen and (max-width: 480px) {
+
+  .panel-input {
+
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    position: sticky !important;
+    bottom: 0 !important;
+
+    width: 100% !important;
+
+    background: #ffffff !important;
+
+    padding:
+      10px
+      12px
+      calc(env(safe-area-inset-bottom) + 12px)
+      12px !important;
+
+    border-top: 1px solid #eef0f5 !important;
+
+    z-index: 99999 !important;
+
+    flex-shrink: 0 !important;
+  }
+
+  .input-field {
+
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    flex: 1 1 auto !important;
+
+    min-width: 0 !important;
+
+    background: #ffffff !important;
+
+    color: #1c2340 !important;
+
+    z-index: 99999 !important;
+  }
+
+  .send-btn {
+
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    flex-shrink: 0 !important;
+
+    margin-left: 8px !important;
+
+    z-index: 99999 !important;
+  }
+
+  .panel-messages {
+    padding-bottom: 12px !important;
   }
 
 }
