@@ -535,13 +535,15 @@
       }
       .chat-panel {
         /* On phones: anchor to bottom, stretch wide, tall panel */
-        bottom: calc(var(--boffset) + var(--bsize) + 10px);
-        right: var(--boffset);
-        left: var(--boffset);
-        width: auto;
-        height: 75dvh;
-        height: 75vh; /* fallback */
-        border-radius: 18px;
+        top: max(12px, env(safe-area-inset-top));
+    bottom: calc(env(safe-area-inset-bottom) + 12px);
+    right: 12px;
+    left: 12px;
+
+    width: auto;
+    height: auto;
+
+    border-radius: 18px;
       }
 
     }
