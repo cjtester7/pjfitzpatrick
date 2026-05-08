@@ -14,7 +14,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <!-- overlays-content: keyboard overlays page instead of resizing viewport -->
   <!-- This is required for Visual Viewport API to work correctly on iOS     -->
-  <meta name="interactive-widget" content="overlays-content" />
+  
   <title>PJ — AI Roofing Advisor | PJ Fitzpatrick</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -525,30 +525,31 @@
 
     /* ── Mobile: near full-screen panel ───────────────────── */
     
+      .chat-panel {
+        /* On phones: anchor to bottom, stretch wide, tall panel */
+        bottom: calc(var(--boffset) + var(--bsize) + 10px);
+        right: var(--boffset);
+        left: var(--boffset);
+        width: auto;
+        height: 75dvh;
+        height: 75vh; /* fallback */
+        border-radius: 18px;
+      }
+
+    }
+  
 @media (max-width: 480px) {
 
   html,
   body {
     height: 100%;
+    margin: 0;
     overflow: hidden;
   }
 
-  body {
-    position: fixed;
-    width: 100%;
-  }
-
-  :root {
-    --boffset: 16px;
-  }
-
-  .chat-bubble {
-    bottom: calc(env(safe-area-inset-bottom) + 16px);
-    right: 16px;
-    z-index: 99999;
-  }
-
   .chat-panel {
+
+    position: fixed;
 
     top: 0;
     left: 0;
@@ -563,10 +564,18 @@
     display: flex;
     flex-direction: column;
 
-    transform: translateY(30px);
+    z-index: 9998;
+  }
+
+  .chat-panel:not(.open) {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
   }
 
   .chat-panel.open {
+    opacity: 1;
+    pointer-events: all;
     transform: translateY(0);
   }
 
@@ -576,62 +585,38 @@
   }
 
   .panel-messages {
-    flex: 1;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
 
-    padding-bottom: 16px;
+    flex: 1;
+
+    overflow-y: auto;
+
+    min-height: 0;
+
+    -webkit-overflow-scrolling: touch;
   }
 
   .panel-input {
-    position: sticky;
-    bottom: 0;
 
-    display: flex !important;
-    align-items: center;
+    position: relative;
 
-    padding:
-      10px
-      12px
-      calc(env(safe-area-inset-bottom) + 10px)
-      12px;
+    flex-shrink: 0;
+
+    padding-bottom: calc(env(safe-area-inset-bottom) + 10px);
 
     background: #fff;
-
-    z-index: 10;
-  }
-
-  .input-field {
-    min-width: 0;
-  }
-
-  .send-btn {
-    margin-left: 8px;
-    flex-shrink: 0;
   }
 
   .panel-footer {
     display: none;
   }
 
-  .float-input {
-    display: none !important;
+  .chat-bubble {
+    bottom: calc(env(safe-area-inset-bottom) + 16px);
+    right: 16px;
   }
 }
 
-      .chat-panel {
-        /* On phones: anchor to bottom, stretch wide, tall panel */
-        bottom: calc(var(--boffset) + var(--bsize) + 10px);
-        right: var(--boffset);
-        left: var(--boffset);
-        width: auto;
-        height: 75dvh;
-        height: 75vh; /* fallback */
-        border-radius: 18px;
-      }
-
-    }
-  </style>
+</style>
 </head>
 <body>
 
@@ -708,8 +693,6 @@
   </div>
 
 </div>
-
-
 
 <script>
 // ─────────────────────────────────────────────────────────────────────────────
@@ -828,6 +811,7 @@ function showTyping(visible) {
   if (visible) { scrollToBottom(); }
 }
 
+
 function setInputEnabled(enabled) {
   var field = document.getElementById("inputField");
   var send  = document.getElementById("sendBtn");
@@ -842,13 +826,14 @@ function setInputEnabled(enabled) {
   }
 }
 
+
 function autoResize(el) {
   el.style.height = "auto";
   el.style.height = Math.min(el.scrollHeight, 100) + "px";
 }
 
-// Mobile keyboard handling simplified for iPhone stability
-var vvListenerAttached = false;
+
+
 
 
 
@@ -858,6 +843,7 @@ var vvListenerAttached = false;
 // ─────────────────────────────────────────────────────────────────────────────
 // Panel toggle
 // ─────────────────────────────────────────────────────────────────────────────
+
 function togglePanel() {
   panelOpen = !panelOpen;
 
@@ -866,6 +852,7 @@ function togglePanel() {
 
   document.getElementById("bubbleIcon").textContent = panelOpen ? "✕" : "🏠";
 }
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Append message
@@ -1024,17 +1011,19 @@ function handleKeyDown(e) {
   if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
 
+
 function sendMessage() {
   var field = document.getElementById("inputField");
   var text = field.value.trim();
 
-  if (!text || !conversationActive) { return; }
+  if (!text || !conversationActive) return;
 
   field.value = "";
   field.style.height = "auto";
 
   sendMessageText(text);
 }
+
 
 function sendMessageText(text) {
   if (!text || !conversationActive) { return; }
