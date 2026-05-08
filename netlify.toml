@@ -1,0 +1,18 @@
+# FILE:    netlify.toml
+# VERSION: v18
+# UPDATED: 2026-05-07 09:00
+# CHANGES: v18 (CR012 cont): Points to index-v18.html.
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[[redirects]]
+  from   = "/.netlify/functions/*"
+  to     = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from   = "/"
+  to     = "/index-v18.html"
+  status = 200
