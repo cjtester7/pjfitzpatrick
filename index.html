@@ -1,5 +1,16 @@
 <!DOCTYPE html>
-<!-- FILE:    index-v17.html                                                  -->
+<!--
+FILE: index-v18-ios-rebuild.html
+VERSION: v18
+UPDATED: 2026-05-08 04:09
+CHANGES:
+- Removed VisualViewport API implementation
+- Removed floating input system
+- Removed interactive-widget overlays-content meta tag
+- Rebuilt iPhone mobile layout using native viewport behavior
+- Added version tracking comment block
+-->
+
 <!-- VERSION: v17                                                              -->
 <!-- UPDATED: 2026-05-05 04:10                                                 -->
 <!-- CHANGES: v17 (CR012 cont): Visual Viewport API input positioning on iOS.  -->
@@ -495,22 +506,7 @@
     .send-btn:active  { transform: scale(0.92); }
     .send-btn:disabled { background: var(--gray-300); cursor: not-allowed; }
 
-    /* ── Floating input (mobile only — Visual Viewport API positions it) ─ */
-    .float-input {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;               /* JS overrides this via visualViewport */
-      background: var(--white);
-      border-top: 1px solid var(--gray-100);
-      padding: 10px 16px;
-      display: none;           /* hidden by default; shown on mobile when panel opens */
-      gap: 8px;
-      align-items: flex-end;
-      z-index: 10000;          /* above everything including the panel */
-      box-sizing: border-box;
-    }
-    .float-input.visible { display: flex; }
+    
 
     /* ── Panel footer ──────────────────────────────────────── */
     .panel-footer {
@@ -542,13 +538,19 @@
 
   html,
   body {
-    height: 100%;
     margin: 0;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
   }
 
-  .chat-panel {
+  .chat-bubble {
+    bottom: calc(env(safe-area-inset-bottom) + 16px);
+    right: 16px;
+    z-index: 10000;
+  }
 
+  .chat-panel {
     position: fixed;
 
     top: 0;
@@ -559,18 +561,20 @@
     width: 100%;
     height: 100%;
 
+    max-height: 100%;
+
     border-radius: 0;
 
     display: flex;
     flex-direction: column;
 
-    z-index: 9998;
+    z-index: 9999;
   }
 
   .chat-panel:not(.open) {
     opacity: 0;
     pointer-events: none;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
 
   .chat-panel.open {
@@ -580,39 +584,32 @@
   }
 
   .panel-header {
-    padding-top: calc(env(safe-area-inset-top) + 12px);
     flex-shrink: 0;
+    padding-top: calc(env(safe-area-inset-top) + 10px);
   }
 
   .panel-messages {
-
-    flex: 1;
-
+    flex: 1 1 auto;
     overflow-y: auto;
-
     min-height: 0;
 
     -webkit-overflow-scrolling: touch;
   }
 
   .panel-input {
+    flex-shrink: 0;
 
     position: relative;
-
-    flex-shrink: 0;
 
     padding-bottom: calc(env(safe-area-inset-bottom) + 10px);
 
     background: #fff;
+
+    z-index: 5;
   }
 
   .panel-footer {
     display: none;
-  }
-
-  .chat-bubble {
-    bottom: calc(env(safe-area-inset-bottom) + 16px);
-    right: 16px;
   }
 }
 
@@ -814,10 +811,10 @@ function showTyping(visible) {
 
 function setInputEnabled(enabled) {
   var field = document.getElementById("inputField");
-  var send  = document.getElementById("sendBtn");
+  var send = document.getElementById("sendBtn");
 
   field.disabled = !enabled;
-  send.disabled  = !enabled;
+  send.disabled = !enabled;
 
   if (enabled) {
     setTimeout(function() {
@@ -832,12 +829,6 @@ function autoResize(el) {
   el.style.height = Math.min(el.scrollHeight, 100) + "px";
 }
 
-
-
-
-
-
-// Called when panel opens — show/hide float input based on device type
 
 
 // ─────────────────────────────────────────────────────────────────────────────
