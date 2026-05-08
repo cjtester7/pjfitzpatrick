@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <!--
-FILE: index-v18-ios-rebuild.html
-VERSION: v18
-UPDATED: 2026-05-08 04:09
+FILE: index-v19-ios-polish.html
+VERSION: v19
+UPDATED: 2026-05-08 04:19
 CHANGES:
-- Removed VisualViewport API implementation
-- Removed floating input system
-- Removed interactive-widget overlays-content meta tag
-- Rebuilt iPhone mobile layout using native viewport behavior
-- Added version tracking comment block
+- Fixed mobile panel width/positioning
+- Hide launcher bubble when panel is open
+- Corrected header flex overflow on iPhone
+- Removed left-side panel offset
+- Fixed safe-area spacing and mobile sizing
 -->
+
 
 <!-- VERSION: v17                                                              -->
 <!-- UPDATED: 2026-05-05 04:10                                                 -->
@@ -534,6 +535,7 @@ CHANGES:
 
     }
   
+
 @media (max-width: 480px) {
 
   html,
@@ -544,13 +546,24 @@ CHANGES:
     overflow: hidden;
   }
 
+  body {
+    position: fixed;
+    inset: 0;
+  }
+
   .chat-bubble {
     bottom: calc(env(safe-area-inset-bottom) + 16px);
     right: 16px;
     z-index: 10000;
   }
 
+  /* Hide launcher when panel is open */
+  .chat-bubble.open {
+    display: none !important;
+  }
+
   .chat-panel {
+
     position: fixed;
 
     top: 0;
@@ -558,10 +571,13 @@ CHANGES:
     right: 0;
     bottom: 0;
 
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100dvh;
 
-    max-height: 100%;
+    max-width: 100vw;
+    max-height: 100dvh;
+
+    margin: 0;
 
     border-radius: 0;
 
@@ -569,12 +585,14 @@ CHANGES:
     flex-direction: column;
 
     z-index: 9999;
+
+    overflow: hidden;
   }
 
   .chat-panel:not(.open) {
     opacity: 0;
     pointer-events: none;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
 
   .chat-panel.open {
@@ -584,24 +602,53 @@ CHANGES:
   }
 
   .panel-header {
+
     flex-shrink: 0;
+
     padding-top: calc(env(safe-area-inset-top) + 10px);
+
+    min-height: 88px;
+
+    overflow: hidden;
+  }
+
+  .ph-info {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .ph-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ph-actions {
+    display: none;
   }
 
   .panel-messages {
+
     flex: 1 1 auto;
-    overflow-y: auto;
+
     min-height: 0;
+
+    overflow-y: auto;
 
     -webkit-overflow-scrolling: touch;
   }
 
   .panel-input {
+
     flex-shrink: 0;
 
     position: relative;
 
-    padding-bottom: calc(env(safe-area-inset-bottom) + 10px);
+    padding:
+      10px
+      12px
+      calc(env(safe-area-inset-bottom) + 10px)
+      12px;
 
     background: #fff;
 
